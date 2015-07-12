@@ -5,10 +5,14 @@ var ioCtr = function (io) {
 	};
 
 	io.on('connection', function(socket) {
+		console.log('connection');
+		io.emit('welcome', 'welcome ');
+
 		io.on('change_name', function(newName) {
-			changeName(newName);
+			console.log(newName);
+			//changeName(newName);
 		});
-	})
+	});
 }
 
 module.exports = ioCtr;
