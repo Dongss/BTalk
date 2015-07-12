@@ -9,6 +9,8 @@ var ioCtr = require('./controllers/io')(io);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.set('port', process.env.PORT || 3000);
+
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -16,6 +18,6 @@ app.get('/', function(req, res, next) {
     res.render('home')
 });
 
-http.listen(3000, function(){
-    console.log('listening on *:3000');
+http.listen(app.get('port'), function(){
+    console.log('listening on %s', app.get('port'));
 });
