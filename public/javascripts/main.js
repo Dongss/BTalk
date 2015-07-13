@@ -3,12 +3,13 @@ require.config({
         'jquery': 'libs/jquery.min',
         'materialize': 'libs/materialize.min',
         'socket': 'libs/socket.io',
-        'message': 'src/socket'
+        'message': 'src/socket',
+        'jquery-cookie': 'libs/jquery.cookie'
     },
 
     shime: {
         'message': {
-            deps: ['jquery', 'socket.io'],
+            deps: ['jquery', 'socket.io', 'jquery-cookie'],
             exports: 'socket'
         },      
         'materialize': {
@@ -18,8 +19,6 @@ require.config({
         
     }
 });
-
-
 
 require(['jquery', 'message'], function($, message) {
     require(['materialize'], function(materialize) {
