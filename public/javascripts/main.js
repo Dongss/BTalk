@@ -19,6 +19,10 @@ require.config({
     }
 });
 
+
+
 require(['jquery', 'message'], function($, message) {
-    message.init();
-})
+    require(['materialize'], function(materialize) {
+        message.init();
+    }); 
+});

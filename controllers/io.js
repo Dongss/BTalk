@@ -1,17 +1,13 @@
 var ioCtr = function (io) {
-	var changeName = function(newName) {
-		console.log('on change name ')
-		io.emit('change_name_success', newName);
-	};
+	var message = function(data) {
+		console.log(data);
+		socket.emit('message_from_server', data);
+	}
 
 	io.on('connection', function(socket) {
-		console.log('connection');
-		io.emit('welcome', 'welcome ');
-
-		io.on('change_name', function(newName) {
-			console.log(newName);
-			//changeName(newName);
-		});
+        socket.on('message_from_client', function(data) {
+        	message(data);
+        });
 	});
 }
 
