@@ -14,6 +14,16 @@ var hasName = function(name) {
 	return false;
 }
 
+var setName = function(oldName, newName, id) {
+    for (var i in users) {
+        if (users[i] === oldName) {
+            delete users[i];
+        }
+    }
+
+    users[id] = newName;
+}
+
 var ioCtr = function (io) {
     var onConnect = function(data, id) {
     	users[id] = data.user_name;
@@ -49,6 +59,31 @@ var ioCtr = function (io) {
 		});
 	};
 
+    var changeName = function(data, id) {
+        if (hasName(data.newName)) {
+            socket.emit('change_name_res', {
+                retCode: -1,
+                message: '天涯何处无芳草，此名已经存在了'
+            });
+        } else {
+            setName(data.oldName, data.newName, id);
+
+            io.emit('change_name_res', {
+                retCode: 0,
+                newName: data.newName,
+                oldName: data.oldName
+            });
+
+            io.emit('message_from_server', {
+                user_name: data.newName,
+                time: getTime(),
+                message: ' 修改昵称',
+                type: 'SYSTEM',
+                users: users
+            })
+        }
+    }
+
 	io.on('connection', function(socket) {
 	    socket.on('message_from_client', function(data) {
         	message(data, socket.id);
@@ -56,6 +91,10 @@ var ioCtr = function (io) {
 
         socket.on('client_connect', function(data) {
         	onConnect(data, socket.id);
+        });
+
+        socket.on('change_name', function(data) {
+            changeName(data, socket.id);
         });
 
         socket.on('disconnect', function() {

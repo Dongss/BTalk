@@ -1,5 +1,5 @@
 define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('http://192.168.0.100:3000');
 
     var getName = function() {
         return ($.cookie('user_name'));
@@ -14,15 +14,17 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
         socket.emit('client_connect', {user_name: getName()})
     };
 
+    var setName = function(name) {
+        $.cookie('user_name', name)
+    };
+
     var inputListener = function() {
         $('#input').keydown(function(e) { 
-            if (e.keyCode === 13) {
-                var msg = {
+            if (e.keyCode === 13) {         
+                socket.emit('message_from_client', {
                     user_name: getName(),
                     message: $(this).val()
-                }; 
-
-                socket.emit('message_from_client', msg) ;
+                }) ;
                 $(this).val('');
             } 
         });
@@ -61,7 +63,7 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
             $.unique(allUsers);   
 
             for (var i in allUsers) {
-                htmlUsers = '<i class="mdi-image-timer-auto"></i>' +htmlUsers + allUsers[i] + '<br>';
+                htmlUsers = htmlUsers + '<i class="mdi-image-timer-auto">-</i>' + allUsers[i] + '<br>';
                 usersNum ++;
             }
 
@@ -84,7 +86,7 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
         });
     };
 
-    var changeName = function(newName){
+    var changeName = function(){
         $('#nick-name').html(
             '<input placeholder="输入昵称" type="text" class="validate" id="new-name">'
             + '<a class="waves-effect waves-teal btn-flat" id="change-yes">确认</a>'
@@ -104,9 +106,24 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
         if (newName === "" || newName.length > 10) {
             alert('0-10个字符，别闹', 3000);
         } else {
-            socket.emit('change-name', newName)
+            socket.emit('change_name', {
+                oldName: getName(),
+                newName: newName
+            });
         }
     };
+
+    var changeNameDone = function(data) {
+        if (data.oldName === getName()) {
+            if (data.retCode === 0) {
+                setName(data.newName);
+                initNickName(data.newName);
+            } else {
+                alert(data.message);
+                initNickName();
+            }
+        }
+    }
 
     var init = function() {
         // 初始化用昵称
@@ -119,6 +136,10 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
         socket.on('message_from_server', function(data) {
             onMessage(data);
         });
+        // 修改昵称完成
+        socket.on('change_name_res', function(data) {
+            changeNameDone(data);
+        })
     };
 
     return {
