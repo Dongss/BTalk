@@ -54,12 +54,12 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
             var usersNum = 0;
 
             for (var i in data.users) {
-                allU sers.push(data.users[i]);
+                allUsers.push(data.users[i]);
             }
 
             // 去重
             $.unique(allUsers);   
-             
+
             for (var i in allUsers) {
                 htmlUsers = htmlUsers + allUsers[i] + '<br>';
                 usersNum ++;
