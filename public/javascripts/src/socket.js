@@ -61,20 +61,58 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
             $.unique(allUsers);   
 
             for (var i in allUsers) {
-                htmlUsers = htmlUsers + allUsers[i] + '<br>';
+                htmlUsers = '<i class="mdi-image-timer-auto"></i>' +htmlUsers + allUsers[i] + '<br>';
                 usersNum ++;
             }
 
-            $('#users_num').text('当前在线 （' + usersNum + '）');
+            $('#users_num').html('<i class="mdi-social-people"></i>当前在线 （' + usersNum + '）');
             $('#users').html(htmlUsers);
         }
 
         $('.chat-box').prepend(html);
     }
 
+    var initNickName = function() {
+        $('#nick-name').html(
+            '<span class="tooltipped" id="change-name-btn" data-position="right" data-tooltip="点击修改"> 昵称：'
+            + getName() + '</span>');
+
+        $('.tooltipped').tooltip({delay: 20});
+
+        $('#change-name-btn').click(function(event) {
+            changeName();
+        });
+    };
+
+    var changeName = function(newName){
+        $('#nick-name').html(
+            '<input placeholder="输入昵称" type="text" class="validate" id="new-name">'
+            + '<a class="waves-effect waves-teal btn-flat" id="change-yes">确认</a>'
+            + '<a class="waves-effect waves-teal btn-flat" id="change-no">取消</a>'
+        );
+
+        $('#change-no').click(function(event) {
+            initNickName();
+        });
+
+        $('#change-yes').click(function(event) {
+            onChangeName($('#new-name').val());
+        });
+    };
+
+    var onChangeName = function(newName) {
+        if (newName === "" || newName.length > 10) {
+            alert('0-10个字符，别闹', 3000);
+        } else {
+            socket.emit('change-name', newName)
+        }
+    };
+
     var init = function() {
-        // 初始化昵称
+        // 初始化用昵称
         initName();
+        // 初始化昵称显示
+        initNickName();
         // 监听输入
         inputListener();
         // 收到来自服务器的消息

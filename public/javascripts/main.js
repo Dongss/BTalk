@@ -22,6 +22,7 @@ require.config({
 
 require(['jquery', 'message'], function($, message) {
     require(['materialize'], function(materialize) {
-        message.init();
+        $('.tooltipped').tooltip({delay: 20});
+        message.init(materialize);
     }); 
 });

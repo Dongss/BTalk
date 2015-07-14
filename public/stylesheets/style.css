@@ -9,3 +9,9 @@
     height: 170px;
     overflow-y: auto;
 }
+#nick-name {
+    cursor:pointer
+}
+#nick-name:hover {
+    color: #777777
+}
