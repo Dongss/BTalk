@@ -1,9 +1,25 @@
 var moment = require('moment');
 var users = {};
 
-var getTime=function() { 
+var getTime = function() { 
   	return  moment().format('HH:mm:ss');
 };
+
+var hasName = function(name) {
+	for (var i in users) {
+		if (users[i] === name) {
+			return true;
+		}
+	}
+	return false;
+}
+
+var getUsers = function() {
+	var _users = [];
+	for (var i in users) {
+		if (users[i])
+	}
+}
 
 var ioCtr = function (io) {
     var onConnect = function(data, id) {
@@ -20,7 +36,7 @@ var ioCtr = function (io) {
 
     var onDisconnect = function(id) { 
         var name = 	users[id];
-        delete users[id] ;
+        delete users[id];
 
     	io.emit('message_from_server', {
     		user_name: name,
@@ -29,7 +45,7 @@ var ioCtr = function (io) {
     		type: 'SYSTEM',
     		users: users
     	}); 	
-    }
+    };
 
 	var message = function(data, id) {
 		io.emit('message_from_server', {

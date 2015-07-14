@@ -44,17 +44,24 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
                     + data.message + '</div>';
             }
         } else if (data.type === 'SYSTEM') {
-            console.log(data.users)
             html = html + 'grey lighten-3">'
                 + '<i class="mdi-av-volume-up orange-text lighten-1">系统通知：</i>'
                 + '<span class="blue-text">' + data.user_name + '</span>' + data.message
                 + '</div>';
 
             var htmlUsers = '';
+            var allUsers = [];
             var usersNum = 0;
 
             for (var i in data.users) {
-                htmlUsers = htmlUsers + data.users[i] + '<br>';
+                allU sers.push(data.users[i]);
+            }
+
+            // 去重
+            $.unique(allUsers);   
+             
+            for (var i in allUsers) {
+                htmlUsers = htmlUsers + allUsers[i] + '<br>';
                 usersNum ++;
             }
 
