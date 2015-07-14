@@ -18,16 +18,17 @@ var ioCtr = function (io) {
     	});
     };
 
-    var onDisconnect = function(id) { 	
+    var onDisconnect = function(id) { 
+        var name = 	users[id];
+        delete users[id] ;
+
     	io.emit('message_from_server', {
-    		user_name: users[id],
+    		user_name: name,
     		time: getTime(),
     		message: ' 退出群聊',
     		type: 'SYSTEM',
     		users: users
-    	});
-
-    	delete users[id] ;
+    	}); 	
     }
 
 	var message = function(data, id) {
