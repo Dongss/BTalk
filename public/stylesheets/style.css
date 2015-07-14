@@ -1,6 +1,7 @@
-.other-message {
-	
+.chat-box {
+    height: 300px;
+    overflow-y: auto;
 }
 .self-message {
-	
+    text-align: right;
 }

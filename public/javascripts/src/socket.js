@@ -8,8 +8,10 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
     var initName = function() {
         if (!getName()) {
             // cookie 七天有效期
-            $.cookie('user_name', ('游客' + parseInt((Math.random() * (999999 - 100000) + 100000))), {expires: 7});
+            $.cookie('user_name', ('游客' + parseInt((Math.random() * (99999999 - 10000000) + 10000000))), {expires: 7});
         }
+
+        socket.emit('client_connect', {user_name: getName()})
     };
 
     var inputListener = function() {
@@ -27,13 +29,28 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
     };
 
     var onMessage = function(data) {
-        console.log(data);
-        $('#input-container').after(
-            '<div class="row">'
-            +  '<span class="blue-text">'
-            + data.user_name + '&nbsp;&nbsp;&nbsp;' + data.time + '</span><br>' 
-            + data.message + '</div>'
-        );
+        var html = '<div class="row';
+
+        if (data.type === 'MESSAGE') {
+            if (data.user_name === getName()) {
+                html = html + ' self-message">'
+                    + data.message + '<i class="mdi-hardware-keyboard-return teal-text">'
+                    + data.time + '&nbsp' + data.user_name + '</i>'
+                    + '</div>';
+            } else {
+                html = html + '">'
+                    +  '<span class="blue-text">'
+                    + data.user_name + '&nbsp;&nbsp;&nbsp;' + data.time + '</span><br>' 
+                    + data.message + '</div>';
+            }
+        } else if (data.type === 'SYSTEM') {
+            html = html + 'grey lighten-3">'
+                + '<i class="mdi-av-volume-up orange-text lighten-1">系统通知：</i>'
+                + '<span class="blue-text">' + data.user_name + '</span>' + data.message
+                + '</div>';
+        }
+
+        $('.chat-box').prepend(html);
     }
 
     var init = function() {
