@@ -14,13 +14,6 @@ var hasName = function(name) {
 	return false;
 }
 
-var getUsers = function() {
-	var _users = [];
-	for (var i in users) {
-		if (users[i])
-	}
-}
-
 var ioCtr = function (io) {
     var onConnect = function(data, id) {
     	users[id] = data.user_name;
