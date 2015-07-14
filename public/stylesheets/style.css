@@ -5,3 +5,7 @@
 .self-message {
     text-align: right;
 }
+#users {
+    height: 170px;
+    overflow-y: auto;
+}

@@ -48,6 +48,16 @@ define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
                 + '<i class="mdi-av-volume-up orange-text lighten-1">系统通知：</i>'
                 + '<span class="blue-text">' + data.user_name + '</span>' + data.message
                 + '</div>';
+
+            var htmlUsers = '';
+            var usersNum = 0;
+            for (var i in data.users) {
+                htmlUsers = htmlUsers + data.users[i] + '<br>';
+                usersNum ++;
+            }
+
+            $('#users_num').text('在线人数 （' + usersNum + '）');
+            $('#users').html(htmlUsers);
         }
 
         $('.chat-box').prepend(html);

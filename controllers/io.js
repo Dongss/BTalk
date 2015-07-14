@@ -30,7 +30,7 @@ var ioCtr = function (io) {
     	delete users[id] ;
     }
 
-	var message = function(id) {
+	var message = function(data, id) {
 		io.emit('message_from_server', {
 			user_name: users[id],
 			time: getTime(),
