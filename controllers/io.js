@@ -2,7 +2,7 @@ var moment = require('moment');
 var users = {};
 
 var getTime = function() { 
-  	return  moment().format('HH:mm:ss');
+  	return  moment().tz('Asia/Shanghai').format('HH:mm:ss');
 };
 
 var hasName = function(name) {
