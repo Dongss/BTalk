@@ -2,7 +2,7 @@ var moment = require('moment-timezone');
 var xss = require('xss');
 var users = {};
 
-function escapeHtml (html) {
+var escapeHtml = function(html) {
   return html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
