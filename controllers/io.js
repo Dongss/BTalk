@@ -1,5 +1,14 @@
 var moment = require('moment-timezone');
+var xss = require('xss');
 var users = {};
+
+var xssFilter = function(data) {
+    for (var i in data) {
+        data[i] = xss(data[i]);
+    }
+
+    return data;
+}
 
 var getTime = function() { 
   	return  moment().tz('Asia/Shanghai').format('HH:mm:ss');
@@ -86,18 +95,22 @@ var ioCtr = function (io) {
 
 	io.on('connection', function(socket) {
 	    socket.on('message_from_client', function(data) {
+            data = xssFilter(data);
         	message(data, socket.id);
         });
 
         socket.on('client_connect', function(data) {
+            data = xssFilter(data);
         	onConnect(data, socket.id);
         });
 
         socket.on('change_name', function(data) {
+            data = xssFilter(data);
             changeName(data, socket.id);
         });
 
         socket.on('disconnect', function() {
+            data = xssFilter(data);
         	onDisconnect(socket.id);
         });
 	});
