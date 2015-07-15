@@ -2,9 +2,14 @@ var moment = require('moment-timezone');
 var xss = require('xss');
 var users = {};
 
+function escapeHtml (html) {
+  return html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 var xssFilter = function(data) {
     for (var i in data) {
         data[i] = xss(data[i]);
+        data[i] = escapeHtml(data[i]);
     }
 
     return data;
@@ -110,7 +115,6 @@ var ioCtr = function (io) {
         });
 
         socket.on('disconnect', function() {
-            data = xssFilter(data);
         	onDisconnect(socket.id);
         });
 	});
