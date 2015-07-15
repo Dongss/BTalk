@@ -1,5 +1,5 @@
 define(['jquery', 'socket', 'jquery-cookie'], function($, io) {
-    var socket = io.connect('http://192.168.0.100:3000');
+    var socket = io.connect('http://localhost:3000');
 
     var getName = function() {
         return ($.cookie('user_name'));
